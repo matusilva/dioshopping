@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Grid, Button, TextField } from '@material-ui/core/';
+import { Grid, Button, TextField, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio } from '@material-ui/core/';
 
 const Contatos = () => {
 
@@ -10,6 +10,7 @@ const Contatos = () => {
     const [validator, setValidator] = useState(false);
     const [render, setRender] = useState(false);
     const [success, setSuccess] = useState(false);
+    const [feedbackValue, setFeedbackValue] = useState('');
 
     useEffect(async () => {
         const response = await fetch(url)
@@ -25,6 +26,7 @@ const Contatos = () => {
         const bodyForm = {
             email: author,
             message: content,
+            feedback: feedbackValue,
         }
 
         fetch(url, {
@@ -47,6 +49,7 @@ const Contatos = () => {
         
         setAuthor('');
         setContent('');
+        setFeedbackValue('');
         
         console.log(content)
     }  
@@ -56,6 +59,20 @@ const Contatos = () => {
             <Grid container direction="row" xs={12}>
                 <TextField id="name" label="Name" value={author} onChange={(event)=>{setAuthor(event.target.value)}} fullWidth/>
                 <TextField id="message" label="Message" value={content} onChange={(event)=>{setContent(event.target.value)}} fullWidth/>
+                <FormControl>
+                <FormLabel id="feedback">Nos Avalie</FormLabel>
+                <RadioGroup
+                    row
+                    aria-labelledby="feedback"
+                    name="row-radio-buttons-group"
+                >
+                    <FormControlLabel value="1" onChange={(event)=>{setFeedbackValue(event.target.value)}} control={<Radio />} label="1" />
+                    <FormControlLabel value="2" onChange={(event)=>{setFeedbackValue(event.target.value)}} control={<Radio />} label="2" />
+                    <FormControlLabel value="3" onChange={(event)=>{setFeedbackValue(event.target.value)}} control={<Radio />} label="3" />
+                    <FormControlLabel value="4" onChange={(event)=>{setFeedbackValue(event.target.value)}} control={<Radio />} label="4" />
+                    <FormControlLabel value="5" onChange={(event)=>{setFeedbackValue(event.target.value)}} control={<Radio />} label="5" />
+                </RadioGroup>
+                </FormControl>
             </Grid>
 
             {validator && 
@@ -81,6 +98,7 @@ const Contatos = () => {
                         <div className="card-body">
                             <h5 className="card-title">{content.email}</h5>
                             <p className="card-text">{content.message}</p>
+                            <p className='card-text'>Nota: {content.feedback}</p>
                             <p className="card-text"><small className="text-muted">{content.created_at}</small></p>
                         </div>
                     </div>
